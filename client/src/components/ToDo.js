@@ -1,5 +1,5 @@
 import React from 'react';
-import { Panel, Col } from 'react-bootstrap';
+import { Panel } from 'react-bootstrap';
 
 class ToDo extends React.Component {
   render() {

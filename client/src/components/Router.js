@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import Home from './pages/Home';
 import Board from './pages/Board';
 
+console.log(process.env.NODE_ENV);
+
 class Router extends React.Component {
   render() {
     switch(this.props.page) {
