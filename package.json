@@ -10,12 +10,15 @@
   "author": "Matthew Fasman <matthew.f4sm4n@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "node ./src/server.js",
+    "start": "concurrently \"npm run server\" \"npm run client",
     "nodemon": "nodemon ./src/server.js",
     "pretest": "eslint ./src --fix",
+    "server": "node ./src/server.js",
+    "client": "node start-client.js",
     "test": "echo \"Tests complete\""
   },
   "devDependencies": {
+    "concurrently": "^3.5.0",
     "eslint": "^4.6.1",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-plugin-import": "^2.7.0",

@@ -2,7 +2,7 @@ const http = require('http');
 const { URL } = require('url');
 const path = require('path');
 
-const PORT = process.env.PORT || process.env.NODE_PORT || 3000;
+const PORT = process.env.PORT || process.env.NODE_PORT || 3001;
 
 const contentResponses = require('./contentResponses');
 const jsonResponses = require('./jsonResponses');

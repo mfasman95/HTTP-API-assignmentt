@@ -1,4 +1,5 @@
 const respondJson = status => (object, headers) => (req, res) => {
+  /*
   let standardHeaders;
   if (process.env.NODE_ENV !== 'production') {
     standardHeaders = {
@@ -8,7 +9,9 @@ const respondJson = status => (object, headers) => (req, res) => {
       'access-control-max-age': 10,
       'Content-Type': 'application/json',
     };
-  } else standardHeaders = { 'Content-Type': 'application/json' };
+  } else
+  */
+  const standardHeaders = { 'Content-Type': 'application/json' };
 
   const finalHeaders = Object.assign(standardHeaders, headers);
   res.writeHead(status, finalHeaders);
