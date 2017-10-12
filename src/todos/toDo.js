@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 
-export default class ToDo {
+class ToDo {
   constructor(text) {
     this.text = text;
     this.completed = false;
@@ -17,3 +17,7 @@ export default class ToDo {
     this.completed = !this.completed;
   }
 }
+
+module.exports = Object.freeze({
+  ToDo,
+});

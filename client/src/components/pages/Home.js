@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { FormGroup, InputGroup, FormControl, HelpBlock, Button, Col } from 'react-bootstrap';
 import { changePage } from './../../redux/reducers/router.reducer';
+import { enterBoard } from './../../redux/reducers/board.reducer';
 import { makeApiGet, makeApiPost } from './../../scripts/api.js';
 
 class Home extends React.Component {
@@ -11,7 +12,8 @@ class Home extends React.Component {
     this.state = { value: '' }
 
     this.HI_ListName = this.HI_ListName.bind(this);
-    this.goToList = this.goToList.bind(this);
+    this.goToBoard = this.goToBoard.bind(this);
+    this.resolveApiResponse = this.resolveApiResponse.bind(this);
   }
 
   HI_ListName(e){
@@ -20,14 +22,25 @@ class Home extends React.Component {
     });
   }
 
-  goToList(){
-    makeApiGet('getList')({
+  resolveApiResponse(res){
+    res.json().then((data) => {
+      this.props.dispatch(enterBoard(data));
+      this.props.dispatch(changePage('BOARD'));
+    }).catch(console.error);
+  }
+
+  goToBoard(){
+    makeApiGet(`getBoard/?board=${this.state.value}`)({
       success: (res) => {
-        console.log('SUCCESS', res);
+        if (res.status === 200) this.resolveApiResponse(res);
+        else {
+          makeApiPost(`makeBoard/?board=${this.state.value}`)({
+            success: this.resolveApiResponse,
+            failure: console.error,
+          });
+        }
       },
-      failure: (err) => {
-        console.log('FAILURE', err);
-      }
+      failure: console.error,
     });
   }
 
@@ -48,7 +61,7 @@ class Home extends React.Component {
                 placeholder={'Type The List Name Here'}
               />
               <InputGroup.Button>
-                <Button bsStyle='success' onClick={this.goToList}>
+                <Button bsStyle='success' onClick={this.goToBoard}>
                   <i className='fa fa-arrow-right'/>
                 </Button>
               </InputGroup.Button>

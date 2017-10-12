@@ -1,14 +1,15 @@
 const respondJson = status => (object, headers) => (req, res) => {
   let standardHeaders;
-  (process.env.NODE_ENV !== 'production') ? standardHeaders = {
-    'access-control-allow-origin': '*',
-    'access-control-allow-methods': 'GET, POST, PUT, DELETE, OPTIONS',
-    'access-control-allow-headers': 'Content-Type, accept',
-    'access-control-max-age': 10,
-    'Content-Type': 'application/json'
-  } : standardHeaders = {
-    'Content-Type': 'application/json'
-  };
+  if (process.env.NODE_ENV !== 'production') {
+    standardHeaders = {
+      'access-control-allow-origin': '*',
+      'access-control-allow-methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      'access-control-allow-headers': 'Content-Type, accept',
+      'access-control-max-age': 10,
+      'Content-Type': 'application/json',
+    };
+  } else standardHeaders = { 'Content-Type': 'application/json' };
+
   const finalHeaders = Object.assign(standardHeaders, headers);
   res.writeHead(status, finalHeaders);
   res.end(JSON.stringify(object));

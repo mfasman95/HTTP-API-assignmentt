@@ -1,27 +1,29 @@
 const crypto = require('crypto');
-const Note = require('./note');
+const { ToDo } = require('./toDo');
 
-export default class Board {
+class Board {
   constructor(name) {
-    this.notes = {};
+    this.toDos = {};
     this.name = name;
-    this.etag = crypto.createHash('sha1').update(this.notes);
-    this.digest = this.etag.digest('hex');
+    this.updateHash();
   }
 
   updateHash() {
-    this.etag = crypto.createHash('sha1').update(this.notes);
+    this.etag = crypto.createHash('sha1').update(JSON.stringify(this.toDos));
     this.digest = this.etag.digest('hex');
   }
 
-  addNote(text) {
-    const note = new Note(text);
-    this.notes[note.digest] = note;
+  addToDo(text) {
+    const toDo = new ToDo(text);
+    this.toDos[toDo.digest] = toDo;
     this.updateHash();
   }
 
   removeNote(digest) {
-    if (this.notes[note.digest]) delete this.notes[note.digest];
-    console.log('FAILED TO DELETE NOTE');
+    if (this.toDos[digest]) delete this.toDos[digest];
   }
 }
+
+module.exports = Object.freeze({
+  Board,
+});

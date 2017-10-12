@@ -1,10 +1,10 @@
-export const makeApiRequest = reqObj => reqPath => handlers => {
-  if (process.env.NODE_ENV !== 'production') reqPath = `http://localhost:3000/api/${reqPath}`;
-  else reqPath = `api/${reqPath}`;
+export const makeApiRequest = reqObj => reqPath => (handlers) => {
+  let path = reqPath; 
 
-  console.log(reqPath);
+  if (process.env.NODE_ENV !== 'production') path = `http://localhost:3000/api/${reqPath}`;
+  else path = `api/${reqPath}`;
 
-  fetch(reqPath, reqObj).then(handlers.success).catch(handlers.failure);
+  fetch(path, reqObj).then(handlers.success).catch(handlers.failure);
 };
 
 export const makeApiGet = makeApiRequest({
