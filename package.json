@@ -10,17 +10,18 @@
   "author": "Matthew Fasman <matthew.f4sm4n@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "concurrently \"npm run server\" \"npm run client:prod\"",
+    "start": "concurrently \"yarn server\" \"yarn client:build\"",
     "start:dev": "concurrently \"nodemon run server\" \"npm run client:dev",
     "nodemon": "nodemon ./src/server.js",
     "pretest": "eslint ./src --fix",
     "server": "node ./src/server.js",
-    "client:prod": "node build-client.js",
+    "client:build": "node build-client.js",
     "client:dev": "node start-client.js",
     "test": "echo \"Tests complete\""
   },
   "dependencies": {
-    "concurrently": "^3.5.0"
+    "concurrently": "^3.5.0",
+    "yarn": "^1.2.1"
   },
   "devDependencies": {
     "eslint": "^4.6.1",
