@@ -10,7 +10,7 @@
   "author": "Matthew Fasman <matthew.f4sm4n@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "concurrently \"npm run server\" \"npm run client:prod",
+    "start": "concurrently \"npm run server\" \"npm run client:prod\"",
     "start:dev": "concurrently \"nodemon run server\" \"npm run client:dev",
     "nodemon": "nodemon ./src/server.js",
     "pretest": "eslint ./src --fix",
