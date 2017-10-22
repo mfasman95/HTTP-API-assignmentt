@@ -75,7 +75,7 @@ console.log(process.env.NODE_ENV);
 // In production, build the client app before starting the server
 if (process.env.NODE_ENV === 'production') {
   // Install the necessary dependencies
-  child_process.spawnSync('npm', ['install'], { stdio: 'inherit', cwd: 'client', shell: true });
+  child_process.spawnSync('yarn', [''], { stdio: 'inherit', cwd: 'client', shell: true });
   // Build the react application
   child_process.spawnSync('npm run', ['build'], { stdio: 'inherit', cwd: 'client', shell: true });
 
