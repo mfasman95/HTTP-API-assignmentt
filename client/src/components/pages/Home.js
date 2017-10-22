@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { FormGroup, InputGroup, FormControl, HelpBlock, Button, Col } from 'react-bootstrap';
 import { changePage } from './../../redux/reducers/router.reducer';
 import { enterBoard } from './../../redux/reducers/board.reducer';
-import { makeApiGet, makeApiPost } from './../../scripts/api.js';
+import { makeApiGet } from './../../scripts/api.js';
 
 class Home extends React.Component {
   constructor(props){
@@ -13,7 +13,6 @@ class Home extends React.Component {
 
     this.HI_ListName = this.HI_ListName.bind(this);
     this.goToBoard = this.goToBoard.bind(this);
-    this.resolveApiResponse = this.resolveApiResponse.bind(this);
   }
 
   HI_ListName(e){
@@ -22,23 +21,13 @@ class Home extends React.Component {
     });
   }
 
-  resolveApiResponse(res){
-    res.json().then((data) => {
-      this.props.dispatch(enterBoard(data));
-      this.props.dispatch(changePage('BOARD'));
-    }).catch(console.error);
-  }
-
   goToBoard(){
     makeApiGet(`getBoard/?board=${this.state.value}`)({
       success: (res) => {
-        if (res.status === 200) this.resolveApiResponse(res);
-        else {
-          makeApiPost(`makeBoard/?board=${this.state.value}`)({
-            success: this.resolveApiResponse,
-            failure: console.error,
-          });
-        }
+        res.json().then((data) => {
+          this.props.dispatch(enterBoard(data));
+          this.props.dispatch(changePage('BOARD'));
+        }).catch(console.error);
       },
       failure: console.error,
     });

@@ -6,15 +6,9 @@ const boards = {};
 module.exports = Object.freeze({
   getBoard: (req, res, queryParams) => {
     const boardName = queryParams.get('board');
-    if (boards[boardName]) {
-      jsonResponses.successGet(boards[boardName], {})(req, res);
-    } else jsonResponses.notFound(req, res);
-  },
-  makeBoard: (req, res, queryParams) => {
-    const boardName = queryParams.get('board');
-
-    boards[boardName] = new Board(boardName);
-
+    // If the board doesn't exist, make the board
+    if (!boards[boardName]) boards[boardName] = new Board(boardName);
+    // Send the board data back to the client
     jsonResponses.successGet(boards[boardName], {})(req, res);
   },
 });
