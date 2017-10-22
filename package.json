@@ -10,20 +10,18 @@
   "author": "Matthew Fasman <matthew.f4sm4n@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "concurrently \"yarn server\" \"yarn client:build\"",
+    "start": "cross-env NODE_ENV=production node ./src/server.js",
     "start:dev": "concurrently \"nodemon run server\" \"npm run client:dev",
     "nodemon": "nodemon ./src/server.js",
     "pretest": "eslint ./src --fix",
-    "server": "node ./src/server.js",
-    "client:build": "node build-client.js",
     "client:dev": "node start-client.js",
     "test": "echo \"Tests complete\""
   },
   "dependencies": {
-    "concurrently": "^3.5.0",
-    "yarn": "^1.2.1"
+    "cross-env": "^5.1.0"
   },
   "devDependencies": {
+    "concurrently": "^3.5.0",
     "eslint": "^4.6.1",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-plugin-import": "^2.7.0",
@@ -35,5 +33,10 @@
       "no-underscore-dangle": "off",
       "no-plusplus": "off"
     }
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "client/*"
+    ]
   }
 }

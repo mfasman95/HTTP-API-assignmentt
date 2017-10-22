@@ -1,6 +1,7 @@
 const http = require('http');
 const { URL } = require('url');
 const path = require('path');
+const child_process = require('child_process'); // eslint-disable-line
 
 const PORT = process.env.PORT || process.env.NODE_PORT || 3001;
 
@@ -68,4 +69,14 @@ const onRequest = (req, res) => {
   return jsonResponses.notImplemented(req, res);
 };
 
-http.createServer(onRequest).listen(PORT, () => { console.dir(`Server listening at localhost:${PORT}`); });
+const startServer = () => http.createServer(onRequest).listen(PORT, () => { console.dir(`Server listening at localhost:${PORT}`); });
+
+if (process.env.NODE_ENV === 'production') {
+  // Build the react application
+  const args = ['build'];
+  const opts = { stdio: 'inherit', cwd: 'client', shell: true };
+  child_process.spawnSync('npm run', args, opts);
+
+  // Start the server after building the application
+  startServer();
+} else startServer();
