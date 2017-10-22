@@ -74,10 +74,10 @@ const startServer = () => http.createServer(onRequest).listen(PORT, () => { cons
 console.log(process.env.NODE_ENV);
 // In production, build the client app before starting the server
 if (process.env.NODE_ENV === 'production') {
+  // Install the necessary dependencies
+  child_process.spawnSync('npm', ['install'], { stdio: 'inherit', cwd: 'client', shell: true });
   // Build the react application
-  const args = ['build'];
-  const opts = { stdio: 'inherit', cwd: 'client', shell: true };
-  child_process.spawnSync('npm run', args, opts);
+  child_process.spawnSync('npm run', ['build'], { stdio: 'inherit', cwd: 'client', shell: true });
 
   // Start the server after building the application
   startServer();
