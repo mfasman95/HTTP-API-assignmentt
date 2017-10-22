@@ -19,8 +19,10 @@
     "client:dev": "node start-client.js",
     "test": "echo \"Tests complete\""
   },
+  "dependencies": {
+    "concurrently": "^3.5.0"
+  },
   "devDependencies": {
-    "concurrently": "^3.5.0",
     "eslint": "^4.6.1",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-plugin-import": "^2.7.0",
