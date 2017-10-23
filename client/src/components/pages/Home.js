@@ -15,11 +15,7 @@ class Home extends React.Component {
     this.goToBoard = this.goToBoard.bind(this);
   }
 
-  HI_ListName(e){
-    this.setState({value: e.target.value}, ()=>{
-      if(this.props.onChange) this.props.onChange(this.state.value);
-    });
-  }
+  HI_ListName(e){ this.setState({value: e.target.value}); }
 
   goToBoard(){
     makeApiGet(`getBoard/?board=${this.state.value}`)({

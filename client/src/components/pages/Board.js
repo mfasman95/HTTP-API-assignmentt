@@ -2,17 +2,24 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Well, Col, Button } from 'react-bootstrap';
 import ToDo from './../ToDo';
+import AddToDoModal from './../AddToDoModal';
 
 class Board extends React.Component {
   constructor(props) {
     super(props);
 
-    this.addToDo = this.addToDo.bind(this);
+    // Set initial state
+    this.state = { toDoModalOpen: false }
+
+    // Bind functionality
+    this.openToDoModal = this.openToDoModal.bind(this);
+    this.closeToDoModal = this.closeToDoModal.bind(this);
   }
 
-  addToDo() {
-    console.log('ADD A TODO');
-  }
+  // Open the to do submission modal
+  openToDoModal() { this.setState({ toDoModalOpen: true }) }
+  // Close the to do submission modal
+  closeToDoModal() { this.setState({ toDoModalOpen: false }) }
 
   render() {
     const { name, toDos } = this.props.board;
@@ -23,7 +30,7 @@ class Board extends React.Component {
           <Button
             bsStyle='success'
             bsSize='large'
-            onClick={this.addToDo}
+            onClick={this.openToDoModal}
           >
             Add A To Do
           </Button>
@@ -41,6 +48,10 @@ class Board extends React.Component {
             }
           </Well>
         </Col>
+        <AddToDoModal
+          closeModal={this.closeToDoModal}
+          open={this.state.toDoModalOpen}
+        />
       </div>
     );
   }
