@@ -10,7 +10,7 @@ module.exports = Object.freeze({
     // If the board doesn't exist, make the board
     if (!boards[boardName]) boards[boardName] = new Board(boardName);
     // Send the board data back to the client
-    jsonResponses.successGet(boards[boardName], {})(req, res);
+    jsonResponses.respond200(boards[boardName], {})(req, res);
   },
   getBoardMeta: (req, res) => jsonResponses.meta304(req, res),
 });
