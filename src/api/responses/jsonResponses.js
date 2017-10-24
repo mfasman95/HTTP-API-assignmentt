@@ -17,7 +17,7 @@ const respondMeta = status => headers => (req, res) => {
 module.exports = Object.freeze({
   respond200: respondJson(200),
   respond201: respondJson(201),
-  respond204: respondJson(204),
+  respond204: respondJson(204)({}),
   respond400: respondJson(400),
   respond404: respondJson(404)({
     message: 'The resource you are looking for was not found',

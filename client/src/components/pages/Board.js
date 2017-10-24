@@ -81,7 +81,7 @@ class Board extends React.Component {
           <br/>
           <Well className={(visibleToDos.length <= 0) ? '' : 'toDoWell'}>
             { visibleToDos.length <= 0 && <h3>There Are No To Dos On This Board!</h3> }
-            { visibleToDos.map((td, i) => <ToDo toDo={td} boardName={name} key={i}/>) }
+            { visibleToDos.map((td, i) => <ToDo digest={td.digest} boardName={name} key={i}/>) }
           </Well>
         </Col>
         <AddToDoModal
