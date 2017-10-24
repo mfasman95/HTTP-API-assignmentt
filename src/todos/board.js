@@ -1,5 +1,4 @@
 const crypto = require('crypto');
-const { ToDo } = require('./toDo');
 
 class Board {
   constructor(name) {
@@ -13,13 +12,12 @@ class Board {
     this.digest = this.etag.digest('hex');
   }
 
-  addToDo(text) {
-    const toDo = new ToDo(text);
+  addToDo(toDo) {
     this.toDos[toDo.digest] = toDo;
     this.updateHash();
   }
 
-  removeNote(digest) {
+  removeToDo(digest) {
     if (this.toDos[digest]) delete this.toDos[digest];
   }
 }

@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const jsonResponses = require('./jsonResponses');
+const jsonResponses = require('./api/responses/jsonResponses');
 
 class Users {
   constructor() {

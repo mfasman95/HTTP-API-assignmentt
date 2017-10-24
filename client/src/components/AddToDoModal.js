@@ -1,19 +1,47 @@
 import React from 'react';
-import { Modal, ButtonGroup, Button } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { Modal, ButtonGroup, Button, FormGroup } from 'react-bootstrap';
+import TextInput from './generic/TextInput';
 import { makeApiPost } from './../scripts/api'
-class ToDo extends React.Component {
+import { updateToDo } from './../redux/reducers/board.reducer';
+class ToDoCreationModal extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      toDoTitle: '',
+      toDoText: '',
+    }
+
     this.submitToDo = this.submitToDo.bind(this);
+    this.handleToDoTextInput = this.handleToDoTextInput.bind(this);
+    this.handleToDoTitleInput = this.handleToDoTitleInput.bind(this);
   }
 
+  componentWillUpdate(nextProps, nextState) {
+    // Reset text when modal closes
+    if(nextProps.open === false) {
+      if (nextState.toDoText !== '') this.setState({toDoText: ''});
+      if (nextState.toDoTitle !== '') this.setState({toDoTitle: ''});
+    }
+  }
+
+  handleToDoTextInput(e) { this.setState({toDoText: e.target.value}); }
+  handleToDoTitleInput(e) { this.setState({toDoTitle: e.target.value}); }
+
   submitToDo() {
-    makeApiPost(`addToDo/?text=${this.state.toDoText}`)({
+    let url = 'makeToDo/';
+    url = `${url}?board=${this.props.boardName}`;
+    url = `${url}&title=${this.state.toDoTitle}`;
+    url = `${url}&text=${this.state.toDoText}`;
+    makeApiPost(url)({
       success: (res) => {
-        res.json().then((data) => {
-          console.log(data);
-        }).catch(console.error);
+        // Check if the response came back valid
+        if (res.status === 201) {
+          res.json().then((toDo) => {
+            this.props.dispatch(updateToDo(toDo));
+          }).catch(console.error);
+        }
       },
       failure: console.error,
     });
@@ -27,7 +55,21 @@ class ToDo extends React.Component {
           <Modal.Title>Add To Do</Modal.Title>
         </Modal.Header>
         <Modal.Body className='text-center'>
-          To Do Form Goes Here
+          <FormGroup>
+            <TextInput
+              title='Title'
+              placeholder='Type The Title Here'
+              value={this.state.toDoTitle}
+              updateValue={this.handleToDoTitleInput}
+            />
+            <br/>
+            <TextInput
+              title='Task'
+              placeholder='Type The Task Here'
+              value={this.state.toDoText}
+              updateValue={this.handleToDoTextInput}
+            />
+          </FormGroup>
         </Modal.Body>
         <Modal.Footer>
           <ButtonGroup>
@@ -40,4 +82,4 @@ class ToDo extends React.Component {
   }
 }
 
-export default (ToDo);
+export default connect()(ToDoCreationModal);

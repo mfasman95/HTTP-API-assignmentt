@@ -5,9 +5,9 @@ const child_process = require('child_process'); // eslint-disable-line
 
 const PORT = process.env.PORT || process.env.NODE_PORT || 3001;
 
-const contentResponses = require('./contentResponses');
-const jsonResponses = require('./jsonResponses');
-const { handleApiGet, handleApiPost } = require('./apiHandler');
+const contentResponses = require('./api/responses/contentResponses');
+const jsonResponses = require('./api/responses/jsonResponses');
+const { handleApiGet, handleApiPost, handleApiHead } = require('./api/handlers/handlerMapping');
 
 const handleContent = (req, res, urlData) => {
   let filePath;
@@ -29,7 +29,7 @@ const handleContent = (req, res, urlData) => {
     case 'svg': { contentType = 'image/svg+xml'; break; }
     case 'map': { contentType = 'application/json'; break; }
     // Throw an internal server error if the file extension is not recognized
-    default: { return jsonResponses.internalError(req, res); }
+    default: { return jsonResponses.respond500(req, res); }
   }
   return contentResponses(path.join(__dirname, filePath))({ 'Content-Type': contentType })(req, res);
 };
@@ -37,24 +37,40 @@ const handleContent = (req, res, urlData) => {
 const reqHandlers = Object.freeze({
   GET: (req, res, urlData) => {
     switch (urlData.endPoint) {
-      case '': { return handleContent(req, res, urlData); }
       case 'static': { return handleContent(req, res, urlData); }
       case 'api': { return handleApiGet(req, res, urlData.pathParts[1], urlData.searchParams); }
-      default: { return jsonResponses.notFound(req, res); }
+      case '': { return handleContent(req, res, urlData); }
+      default: { return jsonResponses.respond404(req, res); }
     }
   },
   POST: (req, res, urlData) => {
     // Only handle request if it was sent to the api endpoint
     if (urlData.endPoint === 'api') return handleApiPost(req, res, urlData.pathParts[1], urlData.searchParams);
-    return jsonResponses.badReq('This is not a valid api endpoint', 'invalidEndpoint')(req, res);
+    return jsonResponses.respond400({
+      message: 'This is not a valid api endpoint',
+      id: 'invalidEndpoint',
+    })(req, res);
+  },
+  HEAD: (req, res, urlData) => {
+    // Only handle request if it was sent to the api endpoint
+    if (urlData.endPoint === 'api') return handleApiHead(req, res, urlData.pathParts[1]);
+    return jsonResponses.respond400({
+      message: 'This is not a valid api endpoint',
+      id: 'invalidEndpoint',
+    })(req, res);
   },
 });
 
+// Handler for incoming requests
 const onRequest = (req, res) => {
+  // Build a url object
   const url = new URL(req.url, `http://localhost:${PORT}/`);
+  // Dereference relevant url components
   const { searchParams, pathname } = url;
+  // Seperate the parts of the url path
   const pathParts = pathname.split('/');
-  pathParts.splice(0, 1); // remove the unneeded first part which will always be ''
+  // Remove the unneeded first part which will always be ''
+  pathParts.splice(0, 1);
 
   // There is no endpoint if there is only one path part
   let endPoint;
@@ -66,7 +82,10 @@ const onRequest = (req, res) => {
   // Check if the API handles this kind of method
   if (reqHandlers[req.method]) return reqHandlers[req.method](req, res, urlData);
   // If the handler for the method is not implemented
-  return jsonResponses.notImplemented(req, res);
+  return jsonResponses.respond400({
+    message: `Requests of type ${req.method} are not supported by this server`,
+    id: 'reqMethodNotSupported',
+  })(req, res);
 };
 
 const startServer = () => http.createServer(onRequest).listen(PORT, () => { console.dir(`Server listening at localhost:${PORT}`); });

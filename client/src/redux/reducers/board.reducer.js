@@ -21,10 +21,20 @@ const actionHandlers = {
 
     return rs;
   },
+  UPDATE_TODO: (returnState, action) => {
+    const rs = returnState;
+
+    // Add the received toDo to the board
+    rs.board.toDos[action.toDo.digest] = action.toDo;
+
+    return rs;
+  },
 };
 
+// Define my action creators
 export const enterBoard = board => ({ type: 'ENTER_BOARD', board });
 export const leaveBoard = () => ({ type: 'LEAVE_BOARD' });
+export const updateToDo = toDo => ({ type: 'UPDATE_TODO', toDo });
 
 // Export the reducer
 export default (state = initialState, action) => {

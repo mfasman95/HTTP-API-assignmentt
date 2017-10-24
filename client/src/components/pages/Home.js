@@ -1,23 +1,30 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { FormGroup, InputGroup, FormControl, HelpBlock, Button, Col } from 'react-bootstrap';
+import { FormGroup, Col } from 'react-bootstrap';
+import TextInput from './../generic/TextInput';
+
 import { changePage } from './../../redux/reducers/router.reducer';
 import { enterBoard } from './../../redux/reducers/board.reducer';
-import { makeApiGet } from './../../scripts/api.js';
+import { makeApiGet } from './../../scripts/api';
 
 class Home extends React.Component {
   constructor(props){
     super(props);
 
-    this.state = { value: '' }
+    const url = new URL(window.location);
+    const board = url.searchParams.get('board');
 
-    this.HI_ListName = this.HI_ListName.bind(this);
-    this.goToBoard = this.goToBoard.bind(this);
+    this.state = { value: board || '' }
+
+    if (this.state.value !== '') { this.submitBoard(); }
+
+    this.handleBoardNameInput = this.handleBoardNameInput.bind(this);
+    this.submitBoard = this.submitBoard.bind(this);
   }
 
-  HI_ListName(e){ this.setState({value: e.target.value}); }
+  handleBoardNameInput(e){ this.setState({value: e.target.value}); }
 
-  goToBoard(){
+  submitBoard(){
     makeApiGet(`getBoard/?board=${this.state.value}`)({
       success: (res) => {
         res.json().then((data) => {
@@ -35,26 +42,15 @@ class Home extends React.Component {
         <h1>Welcome Home</h1>
         <Col xs={6} xsOffset={3}>
           <FormGroup>
-            <InputGroup>
-              <InputGroup.Addon>
-                List Name
-              </InputGroup.Addon>
-              <FormControl
-                type={'text'}
-                value={this.state.value}
-                onInput={this.HI_ListName}
-                placeholder={'Type The List Name Here'}
-              />
-              <InputGroup.Button>
-                <Button bsStyle='success' onClick={this.goToBoard}>
-                  <i className='fa fa-arrow-right'/>
-                </Button>
-              </InputGroup.Button>
-            </InputGroup>
-            <HelpBlock>
-              <h3>Type the name of a list above, then click the green arrow. If the list exists, you will see that list.  Otherwise, you will create a new list with the typed name.</h3>
-            </HelpBlock>
+            <TextInput
+              title='Board Name'
+              placeholder='Type The Board Name Here'
+              value={this.state.value}
+              updateValue={this.handleBoardNameInput}
+              submit={this.submitBoard}
+            />
           </FormGroup>
+          <h3>Type In the Name Of A Board And Submit To View That Board's To Dos</h3>
         </Col>
       </div>
     );

@@ -1,7 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import Home from './pages/Home';
-import Board from './pages/Board';
+import { InputGroup, FormControl, Button } from 'react-bootstrap';
 
 /**
  * @class TextInput
@@ -14,6 +12,18 @@ import Board from './pages/Board';
  * @prop submit - The function that's called when the input is submitted
  */
 class TextInput extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.handleEnter = this.handleEnter.bind(this);
+  }
+
+  handleEnter(e){ 
+    if (e.key === 'Enter' && this.props.submit) {
+      this.props.submit();
+    }
+  }
+
   render() {
     return(
       <InputGroup>
@@ -25,15 +35,19 @@ class TextInput extends React.Component {
           value={this.props.value}
           onInput={this.props.updateValue}
           placeholder={this.props.placeholder}
+          onKeyPress={this.handleEnter}
         />
-        <InputGroup.Button>
-          <Button bsStyle='success' onClick={this.props.submit}>
-            <i className='fa fa-arrow-right'/>
-          </Button>
-        </InputGroup.Button>
+        {
+          this.props.submit &&
+            <InputGroup.Button>
+              <Button bsStyle='success' onClick={this.props.submit}>
+                <i className='fa fa-arrow-right'/>
+              </Button>
+            </InputGroup.Button>
+        }
       </InputGroup>
     );
   }
 }
 
-export default connect(TextInput);
+export default (TextInput);

@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import logo from './logo.svg';
 import './css/App.css';
 import Router from './components/Router';
-import { changePage } from './redux/reducers/router.reducer';
 
 class App extends Component {
   constructor(props){
@@ -12,9 +11,7 @@ class App extends Component {
     this.goHome = this.goHome.bind(this);
   }
 
-  goHome(){
-    this.props.dispatch(changePage('HOME'));
-  }
+  goHome(){ window.location.href = `http://${window.location.host}`; }
 
   render() {
     return (
