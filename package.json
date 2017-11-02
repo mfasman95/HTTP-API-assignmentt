@@ -10,7 +10,6 @@
   "author": "Matthew Fasman <matthew.f4sm4n@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "prestart": "npm run client:build",
     "start": "cross-env NODE_ENV=production node ./src/server.js",
     "start:dev": "concurrently \"npm run nodemon\" \"npm run client:dev\"",
     "nodemon": "nodemon ./src/server.js",
