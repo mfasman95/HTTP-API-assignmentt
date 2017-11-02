@@ -5,7 +5,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import ToDo from './../ToDo';
 import AddToDoModal from './../AddToDoModal';
 
-class Board extends React.Component {
+class Board extends React.Component { 
   constructor(props) {
     super(props);
 

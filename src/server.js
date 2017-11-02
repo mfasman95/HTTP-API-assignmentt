@@ -91,6 +91,7 @@ const onRequest = (req, res) => {
 const startServer = () => http.createServer(onRequest).listen(PORT, () => { console.dir(`Server listening at localhost:${PORT}`); });
 
 // In production, build the client app before starting the server
+/* 
 if (process.env.NODE_ENV === 'production') {
   // Start the server after building the application
   startServer();
@@ -99,4 +100,6 @@ if (process.env.NODE_ENV === 'production') {
   // Build the react application
   child_process.spawnSync('npm run', ['build'], { stdio: 'inherit', cwd: 'client', shell: true });
 // Outside of production, the client app is being hotloaded so it doesn't need a build
-} else startServer();
+} else
+*/
+startServer();
